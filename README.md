@@ -31,3 +31,9 @@ install terraform and visual studio code
 C:\apps>terraform version
 Terraform v1.9.2
 on windows_amd64
+
+
+#get provider from azure from terraform application on windows. 
+
+#create recource account
+resource ""
