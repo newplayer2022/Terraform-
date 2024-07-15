@@ -1,5 +1,5 @@
 # Terraform 
-#Terraform concepts 
+#Terraform concepts  terraform configuration file- tells terraform how to manage the infrastruct  
 
 terraform{
   required_providers {
@@ -17,4 +17,17 @@ provicer "azurerm" {
   features {}
 }
 
-resource "" ""
+resource "" "" {
+  name= ""
+  location=""
+}
+
+
+provider - azure or amazon web services.
+
+#build confi file first; terrform "plan command", creat execution plan base on the config have; "apply commad", execute action; "destroy command" destroy infra object base on the config
+install terraform and visual studio code 
+
+C:\apps>terraform version
+Terraform v1.9.2
+on windows_amd64
