@@ -46,3 +46,5 @@ resource "azurerm_storage_account" "storage_account" {
   location                 = "azurerm_resource_group.example.location"
   account_tire             = "Standard"
   account_replication_type = "GRS"
+
+#create container -- data storage---config file
