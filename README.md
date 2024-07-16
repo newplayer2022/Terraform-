@@ -1,4 +1,7 @@
 # Terraform 
+#https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network
+
+
 #Terraform concepts  terraform configuration file- tells terraform how to manage the infrastruct  
 
 terraform{
@@ -49,3 +52,87 @@ resource "azurerm_storage_account" "storage_account" {
 
 #create container -- data storage---config file
 all_blob_prublic_access = true
+
+#creat a container
+resource "azurerm_storage_container" "data" {
+  name                   = "data"                         #name of the container
+  storage_account_name   = "terraformstore1"              #name of the storage account
+  container_access_type  = "private"                      #contain access level
+}
+
+#upload local file to container
+resource "azurerm_storage_blob" "sample" {
+  name                   = "sample.txt"
+  storage_account_name   = ""
+  storage_container_name = "data"
+  type                   = "Block"
+  source                 = "sample.txt"
+}
+#make sure it has correct dependencies, one resource is depended
+depends_on = [
+  azurerm_storage_container.data
+]
+
+#destroy resource 
+terrforam destroy
+
+#using variables before resource block
+variable "storage_account_name" {
+  type = "string"
+  description = "please enter the storage account name"
+}
+
+#creat virtual network
+resource "azurerm_network_security_group" "example_name" {
+  name                = "example-security-group"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+}
+
+resource "azurerm_virtual_network" "example" {
+  name                = "example-network"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+  address_space       = ["10.0.0.0/16"]
+  dns_servers         = ["10.0.0.4", "10.0.0.5"]
+
+  subnet {
+    name           = "subnetA"
+    address_prefix = "10.0.1.0/24"
+  }
+
+  subnet {
+    name           = "subnetB"
+    address_prefix = "10.0.2.0/24"
+    security_group = azurerm_network_security_group.example.id
+  }
+
+  tags = {
+    environment = "Production"
+  }
+}
+
+#creae virtual machine
+resource "azurerm_windows_virtual_machine" "example" {
+  name                = "example-machine"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+  size                = "Standard_F2"
+  admin_username      = "adminuser"
+  admin_password      = "1111"
+  network_interface_ids = [
+    azurerm_network_interface.example.id,
+  ]
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
+    publisher = "MicrosoftWindowsServer"
+    offer     = "WindowsServer"
+    sku       = "2016-Datacenter"
+    version   = "latest"
+  }
+}
