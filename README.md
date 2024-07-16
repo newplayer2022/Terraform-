@@ -48,3 +48,4 @@ resource "azurerm_storage_account" "storage_account" {
   account_replication_type = "GRS"
 
 #create container -- data storage---config file
+all_blob_prublic_access = true
