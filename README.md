@@ -136,3 +136,5 @@ resource "azurerm_windows_virtual_machine" "example" {
     version   = "latest"
   }
 }
+
+#connect your local computer to internet, you need public ip address
