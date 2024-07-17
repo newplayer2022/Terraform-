@@ -248,3 +248,9 @@ resource "azurerm_key_vault" "example" {
     ]
   }
 }
+resourace "azurerm_key_vault_secret" "vmpassword" {
+  name                  = "vmpassword"
+  value                 = "aaa123"
+  key_valut_id          =  azurerm_key_vault.app_vault.id 
+  depends_on            = [ azurerm_key_vault.app_vault ]
+}
