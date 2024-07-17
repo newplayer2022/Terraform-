@@ -137,4 +137,39 @@ resource "azurerm_windows_virtual_machine" "example" {
   }
 }
 
-#connect your local computer to internet, you need public ip address
+#add public ip address
+resource "azurerm_windows_virtual_machine" "app_vm" {
+  name                     = "appvm"
+  resource_group_name      = local.resource_group
+  location                 = local.location
+  size                     = "Standard_D2s_v3"
+  admin_username           = "demousr"
+  admin_pssword            = "xxx"
+  network_interface_ids [
+    azurerm_network_interface.app_interface.id,
+  ]
+}
+
+#add data disk
+resource "azurerm_managed_disk" "data_disk" {
+  name                     = "data-disk"
+  resource_group_name      = "local.resource_group"
+  location                 = "local.location"
+  storage_account_type     = "Standard_LRS"
+  create_option            = "Empty"
+  disk_size_gb             = 16
+}
+
+#attach the data disk to virtual machin
+reource "azurerm_virtual_machine_data_disk_attachment" "disk_attach" {
+  managed_disk_id         = azurerm_managed_disk.data_disk_id
+  virtual_machine_id      = azurerm_windows_virtual_machine.app_vm.id
+  lun                     = "0"
+  chaching                = "Readwrite"
+  depends_on = [
+    azurerm_windows_virtual_machine.appvm
+    azurerm_managed_disk.data_disk
+  ]
+}
+
+  
