@@ -172,4 +172,14 @@ reource "azurerm_virtual_machine_data_disk_attachment" "disk_attach" {
   ]
 }
 
-  
+#virtual machine need availablity set, this need to be created first, then the virtual machine,An availability set is a logical grouping of VMs that allows Azure to understand how your application is built to provide for redundancy and availability,Availability sets place VMs in different fault domains for better reliability,
+
+resource "azurerm_resource_group" "example" {
+  name     = "example-resources"
+  location = "West Europe"
+}
+
+resource "azurerm_availability_set" "example" {
+  name                = "example-aset"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
