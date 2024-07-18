@@ -304,3 +304,15 @@ resource "azurerm_app_service" "example" {
     value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
   }
 }
+
+#monitor alert
+resource "azurerm_monitor_action_group" "example" {
+  name                = "CriticalAlertsAction"
+  resource_group_name = azurerm_resource_group.example.name
+  short_name          = "action1"
+
+ email_receiver {
+    name                    = "support group"
+    email_address           = "xxxabc.@123com"
+    use_common_alert_schema = true
+  }
