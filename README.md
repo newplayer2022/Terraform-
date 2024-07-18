@@ -254,3 +254,14 @@ resourace "azurerm_key_vault_secret" "vmpassword" {
   key_valut_id          =  azurerm_key_vault.app_vault.id 
   depends_on            = [ azurerm_key_vault.app_vault ]
 }
+
+
+#linux vm, same as regular windows vm
+change resource type, azurerm_linux_virtual_machine, linux_vm, username: linuxusr
+
+admin_ssh_key {
+    username   = "adminuser"
+    public_key = file("~/.ssh/id_rsa.pub")
+#disable_password_authentication - (Optional) Should Password Authentication be disabled on this Virtual Machine? Defaults to true. Changing this forces a new resource to be created.
+
+
